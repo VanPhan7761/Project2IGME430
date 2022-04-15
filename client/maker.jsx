@@ -98,9 +98,46 @@ const loadDomosFromServer = async () => {
     );
 }
 
+//loads all assets for the user to buy
+const StoreWindow = (props) => {
+    return (
+        <p>I work!!</p>
+    );
+};
+
 const init = async () => {
     const response = await fetch('/getToken');
     const data = await response.json();
+
+    const storeBtn = document.getElementById('storeBtn');
+    const personalBtn = document.getElementById('personalBtn');
+
+    storeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        //the rendered page
+        ReactDOM.render(<StoreWindow csrf={data.csrfToken} />,
+            document.getElementById('domos'));
+        return false; 
+    });
+
+    personalBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        //render out the domo list again
+        ReactDOM.render(
+            <DomoForm csrf={data.csrfToken} />,
+            document.getElementById('makeDomo')
+        );
+    
+        ReactDOM.render(
+            <DomoList domos={[]} />,
+            document.getElementById('domos')
+        );
+        
+        loadDomosFromServer();
+
+        return false; 
+    });
+
 
     ReactDOM.render(
         <DomoForm csrf={data.csrfToken} />,

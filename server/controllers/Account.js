@@ -29,6 +29,14 @@ const login = (req, res) => {
   });
 };
 
+const storePage = async (req, res) => {
+  try{
+    return res.status(400).json({ error: 'You made to the funny store!' });
+  }catch{
+    return res.status(400).json({ error: 'You made to the funny store!' });
+  }
+}
+
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -66,4 +74,5 @@ module.exports = {
   logout,
   signup,
   getToken,
+  storePage,
 };

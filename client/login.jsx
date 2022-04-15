@@ -42,6 +42,7 @@ const handleSignup = (e) => {
     return false;
 }
 
+//Returns the login form
 const LoginWindow = (props) => {
     return (
         <form id="loginForm"
@@ -61,6 +62,7 @@ const LoginWindow = (props) => {
     );
 };
 
+//Returns the react form 
 const SignupWindow = (props) => {
     return(
         <form id="signupForm"
@@ -89,6 +91,7 @@ const init = async () => {
     const loginButton = document.getElementById('loginButton');
     const signupButton = document.getElementById('signupButton');
     
+    //assigning the event which generates the react pages to the page
     loginButton.addEventListener('click', (e) => {
         e.preventDefault();
         ReactDOM.render(<LoginWindow csrf={data.csrfToken} />,
