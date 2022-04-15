@@ -3,6 +3,7 @@
     document.getElementById('domoMessage').classList.remove('hidden');
   };
 
+  // Send a post request (router) and our handler parses the results after we post
   const sendPost = async (url, data, handler) => {
     const response = await fetch(url, {
       method: 'POST',

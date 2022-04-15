@@ -4,33 +4,41 @@ const handleDomo = (e) => {
     e.preventDefault(); 
     helper.hideError();
 
+    // (2.) Grab the data from our form
     const name = e.target.querySelector('#domoName').value; 
     const age = e.target.querySelector("#domoAge").value; 
+    const description = e.target.querySelector("#domoDescription").value; 
+
     const _csrf = e.target.querySelector("#_csrf").value;
 
-    if(!name || !age) {
+    if(!name || !age || !description) {
         helper.handleError('All fields are required!'); 
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age, _csrf}, loadDomosFromServer);
+    // (3.) Send the json obj to our helper
+    helper.sendPost(e.target.action, {name, age, description, _csrf}, loadDomosFromServer);
 
     return false;
 }
 
+//Generates the form itself
 const DomoForm = (props) => {
     return (
         <form id="domoForm"
-            onSubmit={handleDomo}
+            onSubmit={handleDomo} // (1.) When the user hits submit, we handle the logic from our form in here
             name="domoForm"
             action="/maker"
             method="POST"
             className="domoForm"
+            // encType="multipart/form-data"
         >
             <label htmlFor="name">Name: </label>
             <input id="domoName" type="text" name="name" placeholder="Domo Name" />
             <label htmlFor="age">Age: </label>
             <input id="domoAge" type="number" min="0" name="age" />
+            <label htmlFor="description">Description: </label>
+            <input id="domoDescription" type="text" description="description" placeholder="Description" />
             <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
@@ -47,11 +55,25 @@ const DomoList = (props) =>{
     }
 
     const domoNodes = props.domos.map(domo => {
+        //First section is the default domo logic
+        //Second section is the retrieve form
         return (
             <div key={domo._id} className="domo">
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-                <h3 className="domoName"> Name: {domo.name}</h3>
-                <h3 className="domoAge"> Age: {domo.age}</h3>
+                <div className="domoName"> Name: {domo.name}</div>
+                <div className="domoAge"> Age: {domo.age}</div>
+                <div className="domoDescription"> Description: {domo.description}</div>
+                <button name="Download" onClick={downloadAsset}>Download</button>
+                
+
+                {/* <form ref='retrieveForm' 
+                    id='retrieveForm' 
+                    action='/retrieve' 
+                    method='get'>
+                    <label for='fileName'>Retrieve File By ID: </label>
+                    <input name='_id' type='text' />
+                    <input type='submit' value='Retrieve!' />
+                </form> */}
             </div>
         );
     });
@@ -61,6 +83,10 @@ const DomoList = (props) =>{
             {domoNodes}
         </div>
     );
+}
+
+const downloadAsset = (e) => {
+    console.log("downloaded");
 }
 
 const loadDomosFromServer = async () => {
