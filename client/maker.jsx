@@ -31,7 +31,7 @@ const DomoForm = (props) => {
             action="/maker"
             method="POST"
             className="domoForm"
-            // encType="multipart/form-data"
+            encType="multipart/form-data"
         >
             <label htmlFor="name">Name: </label>
             <input id="domoName" type="text" name="name" placeholder="Domo Name" />
@@ -66,14 +66,14 @@ const DomoList = (props) =>{
                 <button name="Download" onClick={downloadAsset}>Download</button>
                 
 
-                {/* <form ref='retrieveForm' 
+                 <form 
                     id='retrieveForm' 
                     action='/retrieve' 
                     method='get'>
                     <label for='fileName'>Retrieve File By ID: </label>
                     <input name='_id' type='text' />
                     <input type='submit' value='Retrieve!' />
-                </form> */}
+                </form> 
             </div>
         );
     });
@@ -112,6 +112,7 @@ const init = async () => {
     const storeBtn = document.getElementById('storeBtn');
     const personalBtn = document.getElementById('personalBtn');
 
+    //
     storeBtn.addEventListener('click', (e) => {
         e.preventDefault();
         //the rendered page
@@ -120,6 +121,7 @@ const init = async () => {
         return false; 
     });
 
+    //Adds event to regenerate all the personal assets to the main page
     personalBtn.addEventListener('click', (e) => {
         e.preventDefault();
         //render out the domo list again
