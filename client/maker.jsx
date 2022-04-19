@@ -8,9 +8,12 @@ const handleDomo = (e) => {
     const name = e.target.querySelector('#domoName').value; 
     const age = e.target.querySelector("#domoAge").value; 
     const description = e.target.querySelector("#domoDescription").value; 
+    
+
 
     const _csrf = e.target.querySelector("#_csrf").value;
 
+    //checks if we have all the fields filled before making a domo 
     if(!name || !age || !description) {
         helper.handleError('All fields are required!'); 
         return false;
@@ -40,6 +43,10 @@ const DomoForm = (props) => {
             <label htmlFor="description">Description: </label>
             <input id="domoDescription" type="text" description="description" placeholder="Description" />
             <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
+
+            <input type="file" name="sampleFile" />
+
+
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
     );
