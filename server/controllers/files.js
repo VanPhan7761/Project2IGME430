@@ -16,10 +16,20 @@ const uploadFile = async (req, res) => {
        The name sampleFile is arbitrary, and simply comes from the upload
        form in upload.handlebars.
     */
+
+   
+
     if (!req.files || !req.files.sampleFile ) {
       return res.status(400).json({ error: 'No files were uploaded' });
       }
        
+
+      console.log("req file data:")
+      console.log(req.files);
+      console.log(req.files.sampleFile);
+
+
+
       /* Now that we know we have req.files AND there is a sampleFile
          entry in that object, we will grab that file. Again, the
          name sampleFile is arbitrary and simply comes from the name
@@ -52,6 +62,11 @@ const uploadFile = async (req, res) => {
       try {
         const newFile = new File(sampleFile);
         const doc = await newFile.save();
+
+        console.log("file uploaded!");
+
+
+        
         return res.status(201).json({
           message: 'File stored successfully!',
           fileId: doc._id,

@@ -15,14 +15,16 @@ const makeDomo = async (req, res) => {
   }
 
   //check if there are files being uploaded
+  if(!req.body.fileData){
+    return res.status(400).json({ error: 'No files data was uploaded' });
+  }
+
   if (!req.files || !req.files.sampleFile ) {
     return res.status(400).json({ error: 'No files were uploaded' });
   }
 
   //grab the files from the user and save
   const { sampleFile } = req.files;
-
-  
 
   const domoData = {
     name: req.body.name,
@@ -61,7 +63,19 @@ const makeDomo = async (req, res) => {
 
 };
 
+//getting all domos
 const getDomos = (req, res) => DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+  //console.log(DomoModel);
+  if (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occured!' });
+  }
+
+  return res.json({ domos: docs });
+});
+
+const getAllDomos = (req, res) => DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+  console.log(DomoModel);
   if (err) {
     console.log(err);
     return res.status(400).json({ error: 'An error occured!' });
@@ -74,4 +88,5 @@ module.exports = {
   makerPage,
   makeDomo,
   getDomos,
+  getAllDomos,
 };

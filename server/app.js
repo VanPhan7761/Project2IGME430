@@ -9,6 +9,9 @@ const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
 const session = require('express-session');
 
+
+//const fileUpload = require('express-fileupload');
+
 // Redis setup
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
@@ -45,6 +48,17 @@ app.use(helmet({
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.use(compression());
+
+
+
+
+
+//app.use(fileUpload);
+
+
+
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -70,15 +84,18 @@ app.set('views', `${__dirname}/../views`);
 app.use(cookieParser());
 
 app.use(csrf());
+
 app.use((err, req, res, next) => {
   if (err.code !== 'EBADCSRFTOKEN') return next(err);
 
   console.log('Missing CSRF token!');
+  //console.log(req.body);
   return false;
 });
 
 router(app);
 
+//has a port listen for local host
 app.listen(port, (err) => {
   if (err) { throw err; }
   console.log(`Listening on port ${port}`);
