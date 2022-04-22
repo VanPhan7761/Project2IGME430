@@ -10,7 +10,7 @@ const helmet = require('helmet');
 const session = require('express-session');
 
 
-//const fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 
 // Redis setup
 const RedisStore = require('connect-redis')(session);
@@ -53,7 +53,7 @@ app.use(compression());
 
 
 
-//app.use(fileUpload);
+app.use(fileUpload());
 
 
 

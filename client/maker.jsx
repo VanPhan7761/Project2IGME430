@@ -23,7 +23,7 @@ const handleDomo = async (e) => {
     const description = uploadData.get("description");
     const _csrf = uploadData.get("_csrf");
 
-    console.log(_csrf);
+    //console.log(_csrf);
 
     //check if the inputs have been filled out
     if(!name) {
@@ -49,7 +49,7 @@ const handleDomo = async (e) => {
         },
     });
 
-    console.log(fileData);
+    //console.log(fileData);
 
 
     //check if we have filedata json
@@ -116,11 +116,11 @@ const DomoList = (props) =>{
                 <button name="Download" onClick={downloadAsset}>Download</button>
                 
 
-                 <form 
+                <form 
                     id='retrieveForm' 
                     action='/retrieve' 
                     method='get'>
-                    <label for='fileName'>Retrieve File By ID: </label>
+                    <label htmlFor='fileName'>Retrieve File By ID: </label>
                     <input name='_id' type='text' />
                     <input type='submit' value='Retrieve!' />
                 </form> 
@@ -174,6 +174,7 @@ const init = async () => {
     const personalBtn = document.getElementById('personalBtn');
 
     
+    //The store page button which should generate all items in the shop
     storeBtn.addEventListener('click', (e) => {
         e.preventDefault();
 

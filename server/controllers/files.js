@@ -23,10 +23,12 @@ const uploadFile = async (req, res) => {
       return res.status(400).json({ error: 'No files were uploaded' });
       }
        
+      console.log("User ID: ")
+      console.log(req.session.account._id);
 
-      console.log("req file data:")
-      console.log(req.files);
-      console.log(req.files.sampleFile);
+      // console.log("req file data:")
+      // console.log(req.files);
+      // console.log(req.files.sampleFile);
 
 
 
@@ -63,14 +65,18 @@ const uploadFile = async (req, res) => {
         const newFile = new File(sampleFile);
         const doc = await newFile.save();
 
-        console.log("file uploaded!");
+        //console.log("file uploaded!");
 
 
         
+        console.log(doc._id);
+
         return res.status(201).json({
           message: 'File stored successfully!',
           fileId: doc._id,
         });
+
+
       } catch (err) {
           console.log(err);
           return res.status(400).json({
@@ -140,6 +146,8 @@ const uploadFile = async (req, res) => {
              the response and send it back to the user. With the above headers set, the
              browser will know how to properly interpret the data (which is just binary).
           */
+
+
           return res.send(doc.data);
         } catch(err){
           // If we have an error contacting the database, let the user know something happened.

@@ -74,15 +74,23 @@ const getDomos = (req, res) => DomoModel.findByOwner(req.session.account._id, (e
   return res.json({ domos: docs });
 });
 
-const getAllDomos = (req, res) => DomoModel.findByOwner(req.session.account._id, (err, docs) => {
-  console.log(DomoModel);
-  if (err) {
-    console.log(err);
-    return res.status(400).json({ error: 'An error occured!' });
-  }
+//load all domos that exists
+const getAllDomos = async (req, res) => {
+  console.log("getting all domos");
+  try{
+    let docs = await Domo.find({}).exec();
 
-  return res.json({ domos: docs });
-});
+    console.log(docs);
+
+    return res.json({domos: docs});
+
+  } catch (err) {
+
+    console.log("Error getting all domos");
+    return res.status(400).json({ error: 'cannot get all domos!' });
+  }
+  
+};
 
 module.exports = {
   makerPage,
