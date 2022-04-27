@@ -19,7 +19,7 @@ const DomoSchema = new mongoose.Schema({
   },
 
   //-----------
-  //Changes for E
+  // Changes for E
   //-----------
   description: {
     type: String,

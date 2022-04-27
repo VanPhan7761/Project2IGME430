@@ -29,13 +29,13 @@ const login = (req, res) => {
   });
 };
 
-const storePage = async (req, res) => {
-  try{
-    return res.status(400).json({ error: 'You made to the funny store!' });
-  }catch{
-    return res.status(400).json({ error: 'You made to the funny store!' });
-  }
-}
+// const storePage = async (req, res) => {
+//   try {
+//     return res.status(200).json({ message: "You made to the funny store!" });
+//   } catch {
+//     return res.status(400).json({ error: "You made to the funny store!" });
+//   }
+// };
 
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
@@ -74,5 +74,5 @@ module.exports = {
   logout,
   signup,
   getToken,
-  storePage,
+  // storePage,
 };

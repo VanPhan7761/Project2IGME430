@@ -8,29 +8,44 @@ const router = (app) => {
 
   app.get('/getAllDomos', mid.requiresLogin, controllers.Domo.getAllDomos);
 
-  app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get(
+    '/login',
+    mid.requiresSecure,
+    mid.requiresLogout,
+    controllers.Account.loginPage,
+  );
 
-
-  app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login); //debugging (login)
-  app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
-
-
-
+  app.post(
+    '/login',
+    mid.requiresSecure,
+    mid.requiresLogout,
+    controllers.Account.login,
+  ); // debugging (login)
+  app.post(
+    '/signup',
+    mid.requiresSecure,
+    mid.requiresLogout,
+    controllers.Account.signup,
+  );
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/store', mid.requiresLogin, controllers.Account.storePage);
 
-  
   app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
   app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
 
-  //upload files to database
+  // upload files to database
   app.post('/upload', file.uploadFile);
 
-  //return the file back to the user
+  // return the file back to the user
   app.get('/retrieve', file.retrieveFile);
 
-  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get(
+    '/',
+    mid.requiresSecure,
+    mid.requiresLogout,
+    controllers.Account.loginPage,
+  );
 };
 
 module.exports = router;
