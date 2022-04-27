@@ -1,10 +1,10 @@
-const models = require('../models');
-const DomoModel = require('../models/Domo'); // Asset schema
-const File = require('../models/filestore.js'); // File schema
+const models = require("../models");
+const DomoModel = require("../models/Domo"); // Asset schema
+const File = require("../models/filestore.js"); // File schema
 
 const { Domo } = models;
 
-const makerPage = (req, res) => res.render('app');
+const makerPage = (req, res) => res.render("app");
 
 // handles adding the domo logic passed in from our req into the database
 const makeDomo = async (req, res) => {
@@ -12,16 +12,16 @@ const makeDomo = async (req, res) => {
   if (!req.body.name || !req.body.age || !req.body.description) {
     return res
       .status(400)
-      .json({ error: 'Both name, age, and description are required!' });
+      .json({ error: "Both name, age, and description are required!" });
   }
 
   // check if there are files being uploaded
   if (!req.body.fileData) {
-    return res.status(400).json({ error: 'No files data was uploaded' });
+    return res.status(400).json({ error: "No files data was uploaded" });
   }
 
   if (!req.files || !req.files.sampleFile) {
-    return res.status(400).json({ error: 'No files were uploaded' });
+    return res.status(400).json({ error: "No files were uploaded" });
   }
 
   // grab the files from the user and save
@@ -59,23 +59,24 @@ const makeDomo = async (req, res) => {
 
     // check if we our error is because that asset has already been uploaded
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Domo already exists!' });
+      return res.status(400).json({ error: "Domo already exists!" });
     }
 
-    return res.status(400).json({ error: 'An error occured' });
+    return res.status(400).json({ error: "An error occured" });
   }
 };
 
 // getting all domos
-const getDomos = (req, res) => DomoModel.findByOwner(req.session.account._id, (err, docs) => {
-  // console.log(DomoModel);
-  if (err) {
-    // console.log(err);
-    return res.status(400).json({ error: 'An error occured!' });
-  }
+const getDomos = (req, res) =>
+  DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    // console.log(DomoModel);
+    if (err) {
+      // console.log(err);
+      return res.status(400).json({ error: "An error occured!" });
+    }
 
-  return res.json({ domos: docs });
-});
+    return res.json({ domos: docs });
+  });
 
 // load all domos that exists
 const getAllDomos = async (req, res) => {
@@ -88,9 +89,17 @@ const getAllDomos = async (req, res) => {
     return res.json({ domos: docs });
   } catch (err) {
     // console.log('Error getting all domos');
-    return res.status(400).json({ error: 'cannot get all domos!' });
+    return res.status(400).json({ error: "cannot get all domos!" });
   }
 };
+
+// const storePage = async (req, res) => {
+//   try {
+//     return res.status(200).json({ message: "You made to the funny store!" });
+//   } catch {
+//     return res.status(400).json({ error: "You made to the funny store!" });
+//   }
+// };
 
 module.exports = {
   makerPage,
