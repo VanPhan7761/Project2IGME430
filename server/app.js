@@ -1,26 +1,26 @@
-const path = require("path");
-const express = require("express");
-const compression = require("compression");
-const favicon = require("serve-favicon");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const expressHandlebars = require("express-handlebars");
-const helmet = require("helmet");
-const session = require("express-session");
+const path = require('path');
+const express = require('express');
+const compression = require('compression');
+const favicon = require('serve-favicon');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const expressHandlebars = require('express-handlebars');
+const helmet = require('helmet');
+const session = require('express-session');
 
-const fileUpload = require("express-fileupload");
+const fileUpload = require('express-fileupload');
 
 // Redis setup
-const RedisStore = require("connect-redis")(session);
-const redis = require("redis");
-const csrf = require("csurf");
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
+const csrf = require('csurf');
 
-const router = require("./router.js");
+const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURI = process.env.MONGODB_URI || "mongodb://127.0.0.1/DomoMaker";
+const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/AssetMaker';
 mongoose.connect(dbURI, (err) => {
   if (err) {
     // console.log('could not connect to database');
@@ -28,9 +28,8 @@ mongoose.connect(dbURI, (err) => {
   }
 });
 
-const redisURL =
-  process.env.REDISCLOUD_URL ||
-  "redis://default:NXzFZ5tXcH5WFHfsKUM9piFihannkC4N@redis-10719.c83.us-east-1-2.ec2.cloud.redislabs.com:10719";
+const redisURL = process.env.REDISCLOUD_URL
+  || 'redis://default:NXzFZ5tXcH5WFHfsKUM9piFihannkC4N@redis-10719.c83.us-east-1-2.ec2.cloud.redislabs.com:10719';
 // |------------Password-----------| |--------------Hostname--------------------------| |-Port-|
 
 const redisClient = redis.createClient({
@@ -44,10 +43,10 @@ app.use(
   helmet({
     crossOriginEmbedderPolicy: false,
     contentSecurityPolicy: false,
-  })
+  }),
 );
 
-app.use("/assets", express.static(path.resolve(`${__dirname}/../hosted/`)));
+app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.use(compression());
 
@@ -58,31 +57,31 @@ app.use(bodyParser.json());
 
 app.use(
   session({
-    key: "sessionid",
+    key: 'sessionid',
 
     store: new RedisStore({
       client: redisClient,
     }),
 
-    secret: "Domo Arigato",
+    secret: 'Asset Arigato',
     resave: true,
     saveUninitialized: true,
 
     cookie: {
       httpOnly: true,
     },
-  })
+  }),
 );
 
-app.engine("handlebars", expressHandlebars.engine({ defaultLayout: "" }));
-app.set("view engine", "handlebars");
-app.set("views", `${__dirname}/../views`);
+app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
+app.set('view engine', 'handlebars');
+app.set('views', `${__dirname}/../views`);
 app.use(cookieParser());
 
 app.use(csrf());
 
 app.use((err, req, res, next) => {
-  if (err.code !== "EBADCSRFTOKEN") return next(err);
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
 
   // console.log('Missing CSRF token!');
   // console.log(req.body);
@@ -96,5 +95,5 @@ app.listen(port, (err) => {
   if (err) {
     throw err;
   }
-  // console.log(`Listening on port ${port}`);
+  console.log(`Listening on port ${port}`);
 });

@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const _ = require('underscore');
 
-let DomoModel = {};
+let AssetModel = {};
 
 const setName = (name) => _.escape(name).trim();
 
-const DomoSchema = new mongoose.Schema({
+const AssetSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -37,21 +37,24 @@ const DomoSchema = new mongoose.Schema({
   },
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
+AssetSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
   description: doc.description,
 });
 
-DomoSchema.statics.findByOwner = (ownerId, callback) => {
+AssetSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     // Convert the string ownerId to an object id
     owner: mongoose.Types.ObjectId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age description').lean().exec(callback);
+  return AssetModel.find(search)
+    .select('name age description')
+    .lean()
+    .exec(callback);
 };
 
-DomoModel = mongoose.model('Domo', DomoSchema);
+AssetModel = mongoose.model('Asset', AssetSchema);
 
-module.exports = DomoModel;
+module.exports = AssetModel;
