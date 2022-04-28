@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const _ = require("underscore");
+const mongoose = require('mongoose');
+const _ = require('underscore');
 
 let AssetModel = {};
 
@@ -34,7 +34,7 @@ const AssetSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
-    ref: "Account",
+    ref: 'Account',
   },
   createdDate: {
     type: Date,
@@ -56,11 +56,11 @@ AssetSchema.statics.findByOwner = (ownerId, callback) => {
   };
 
   return AssetModel.find(search)
-    .select("name age description")
+    .select('name age description')
     .lean()
     .exec(callback);
 };
 
-AssetModel = mongoose.model("Asset", AssetSchema);
+AssetModel = mongoose.model('Asset', AssetSchema);
 
 module.exports = AssetModel;

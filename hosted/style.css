@@ -242,6 +242,10 @@ nav {
   overflow: hidden;
 }
 
+#signupForm label {
+  font-size: 1em;
+}
+
 .asset:hover {
   transition: border-color 0.2s ease-out;
   border-color: rgba(255, 255, 255, 0.8);
