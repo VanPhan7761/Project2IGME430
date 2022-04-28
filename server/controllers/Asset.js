@@ -27,26 +27,25 @@ const makeAsset = async (req, res) => {
   // grab the files from the user and save
   const { sampleFile } = req.files;
 
-  const assetData = {
-    name: req.body.name,
-    age: req.body.age,
-    description: req.body.description,
-    owner: req.session.account._id,
-  };
+  // creating our asset obj which holds who owns the obj and what file to download from the obj
 
   try {
-    // save the info of the asset to the database
-    const newAsset = new Asset(assetData);
-    await newAsset.save();
-
     // save the file to the database
     const newFile = new File(sampleFile);
     const doc = await newFile.save();
 
     console.log(doc._id);
+    const assetData = {
+      name: req.body.name,
+      age: req.body.age,
+      description: req.body.description,
+      fileId: doc._id,
+      owner: req.session.account._id,
+    };
 
-    // handles returning the asset json obj
-    // console.log('asset added!');
+    // save the info of the asset to the database
+    const newAsset = new Asset(assetData);
+    await newAsset.save();
 
     return res.status(201).json({
       name: newAsset.name,

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const _ = require('underscore');
+const mongoose = require("mongoose");
+const _ = require("underscore");
 
 let AssetModel = {};
 
@@ -26,10 +26,15 @@ const AssetSchema = new mongoose.Schema({
     required: true,
     trim: false,
   },
+  // fileID: {
+  //   type: String,
+  //   required: true,
+  //   trim: false,
+  // },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
-    ref: 'Account',
+    ref: "Account",
   },
   createdDate: {
     type: Date,
@@ -41,6 +46,7 @@ AssetSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
   description: doc.description,
+  // fileID: doc.fileID,
 });
 
 AssetSchema.statics.findByOwner = (ownerId, callback) => {
@@ -50,11 +56,11 @@ AssetSchema.statics.findByOwner = (ownerId, callback) => {
   };
 
   return AssetModel.find(search)
-    .select('name age description')
+    .select("name age description")
     .lean()
     .exec(callback);
 };
 
-AssetModel = mongoose.model('Asset', AssetSchema);
+AssetModel = mongoose.model("Asset", AssetSchema);
 
 module.exports = AssetModel;

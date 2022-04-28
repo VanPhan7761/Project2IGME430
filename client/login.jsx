@@ -18,6 +18,7 @@ const handleLogin = (e) => {
   return false;
 };
 
+//Event fired when user clicks on sign up btn
 const handleSignup = (e) => {
   e.preventDefault();
   helper.hideError();

@@ -1,7 +1,10 @@
-const File = require('../models/filestore.js');
+const File = require("../models/filestore.js");
+const models = require("../models");
+
+const { Asset } = models;
 
 const uploadPage = (req, res) => {
-  res.render('upload');
+  res.render("upload");
 };
 
 const uploadFile = async (req, res) => {
@@ -17,16 +20,20 @@ const uploadFile = async (req, res) => {
        form in upload.handlebars.
     */
 
+  // Check if user is submitting files
   if (!req.files || !req.files.sampleFile) {
-    return res.status(400).json({ error: 'No files were uploaded' });
+    return res.status(400).json({ error: "No files were uploaded" });
+  }
+
+  // check if inputs are put in for the obj
+  if (!req.body.name || !req.body.age || !req.body.description) {
+    return res
+      .status(400)
+      .json({ error: "Both name, age, and description are required!" });
   }
 
   // console.log('User ID: ');
   // console.log(req.session.account._id);
-
-  // console.log("req file data:")
-  // console.log(req.files);
-  // console.log(req.files.sampleFile);
 
   /* Now that we know we have req.files AND there is a sampleFile
          entry in that object, we will grab that file. Again, the
@@ -41,6 +48,8 @@ const uploadFile = async (req, res) => {
          in your database.
       */
   // console.log(sampleFile);
+
+  // console.log(req.body);
 
   /* Once we have our file in memory on our server, we need to store
          it into our database. Take a look at models/filestore.js to see
@@ -60,18 +69,35 @@ const uploadFile = async (req, res) => {
     const newFile = new File(sampleFile);
     const doc = await newFile.save();
 
-    // console.log("file uploaded!");
+    // Create our asset data
+    const assetData = {
+      name: req.body.name,
+      age: req.body.age,
+      description: req.body.description,
+      //fileId: doc._id,
+      owner: req.session.account._id,
+    };
+    //I can save the ID into the asset data but when I try to pass
+    //it into the Asset schema it rejects the ID so I'm removing it
+    //so atleast something is uploaded
 
-    // console.log(doc._id);
+    console.log(assetData);
 
+    // save the info of the asset to the database
+    const newAsset = new Asset(assetData);
+    await newAsset.save();
+
+    // return all data for forms to use
     return res.status(201).json({
-      message: 'File stored successfully!',
-      fileId: doc._id,
+      message: "File stored successfully!",
+      name: newAsset.name,
+      age: newAsset.age,
+      description: newAsset.description,
     });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     return res.status(400).json({
-      error: 'Something went wrong uploading file!',
+      error: "Something went wrong uploading file!",
     });
   }
 };
@@ -84,7 +110,7 @@ const retrieveFile = async (req, res) => {
            send them an error instead.
         */
   if (!req.query._id) {
-    return res.status(400).json({ error: 'Missing file id!' });
+    return res.status(400).json({ error: "Missing file id!" });
   }
 
   /* If we have a file id from the user, we can attempt to find the file.
@@ -101,7 +127,7 @@ const retrieveFile = async (req, res) => {
              can send a 404 to the user and say that resource doesn't exist.
           */
     if (!doc) {
-      return res.status(404).json({ error: 'File not found!' });
+      return res.status(404).json({ error: "File not found!" });
     }
 
     /* If we have made it this far in the try statement, we have not hit
@@ -111,10 +137,10 @@ const retrieveFile = async (req, res) => {
           */
     res.set({
       // Content-Type tells the browser what type of file it is (png, mp3, zip, etc)
-      'Content-Type': doc.mimetype,
+      "Content-Type": doc.mimetype,
 
       // Content-Length tells it how many bytes long it is.
-      'Content-Length': doc.size,
+      "Content-Length": doc.size,
       // Adding “attachment; will force file to download when retrieved rather than show
       // Doesn’t have an impact on things like img tags
       // 'Content-Disposition': `attachment; filename="${doc.name}"`
@@ -129,7 +155,7 @@ const retrieveFile = async (req, res) => {
                to a page that just shows the image. However, if we tell it the file should
                be treated as an attachment it will download the file and not redirect the user.
             */
-      'Content-Disposition': `filename="${doc.name}"` /* `attachment; filename="${doc.name}"` */,
+      "Content-Disposition": `filename="${doc.name}"` /* `attachment; filename="${doc.name}"` */,
     });
 
     /* Finally once we have set the headers, we can write the actual image data to
@@ -143,7 +169,7 @@ const retrieveFile = async (req, res) => {
     // console.log(err);
     return res
       .status(400)
-      .json({ error: 'Something went wrong retrieving file!' });
+      .json({ error: "Something went wrong retrieving file!" });
   }
 };
 

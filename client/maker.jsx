@@ -5,19 +5,15 @@ const handleAsset = async (e) => {
   e.preventDefault();
   helper.hideError();
 
+  //generate a form data obj of all our inputs
   const uploadData = new FormData(e.target);
-
-  //console.log(uploadData.get("name"));
 
   // (2.) Grab the data from our form
   //checks if we have all the fields filled before making an asset
-
   const name = uploadData.get("name");
   const age = uploadData.get("age");
   const description = uploadData.get("description");
   const _csrf = uploadData.get("_csrf");
-
-  //console.log(_csrf);
 
   //check if the inputs have been filled out
   if (!name) {
@@ -43,12 +39,31 @@ const handleAsset = async (e) => {
   //console.log(fileData);
 
   //check if we have filedata json
-  if (!fileData) {
+
+  const result = await fileData.json();
+
+  if (!result) {
     helper.handleError("File did not upload!");
     return false;
   }
 
-  return false;
+  document.getElementById("assetMessage").classList.add("hidden");
+
+  if (result.error) {
+    helper.handleError(result.error);
+  }
+
+  if (result.redirect) {
+    window.location = result.redirect;
+  }
+
+  loadAssetsFromServer(result);
+
+  //console.log(fileData);
+
+  return fileData;
+
+  //return false;
 };
 
 //Upper nav bar react obj that handles uploading data to the DB
@@ -65,7 +80,7 @@ const AssetForm = (props) => {
     >
       <label htmlFor="name">Name: </label>
       <input id="assetName" type="text" name="name" placeholder="Asset Name" />
-      <label htmlFor="age">Age: </label>
+      <label htmlFor="age">Price: </label>
       <input id="assetAge" type="number" min="0" name="age" />
       <label htmlFor="description">Description: </label>
       <input
@@ -76,7 +91,7 @@ const AssetForm = (props) => {
       />
       <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
 
-      <input type="file" name="sampleFile" />
+      <input id="file" type="file" name="sampleFile" />
 
       <input className="makeAssetSubmit" type="submit" value="Make Asset" />
     </form>
@@ -94,7 +109,7 @@ const AssetList = (props) => {
   }
 
   //iterate through and create the asset nodes
-  const assetNodes = props.asset.map((asset) => {
+  const assetNodes = props.assets.map((asset) => {
     //First section is the default asset logic
     //Second section is the retrieve form
     return (
@@ -105,7 +120,7 @@ const AssetList = (props) => {
           className="assetFace"
         />
         <div className="assetName"> Name: {asset.name}</div>
-        <div className="assetAge"> Age: {asset.age}</div>
+        <div className="assetAge"> Price: ${asset.age}</div>
         <div className="assetDescription">
           {" "}
           Description: {asset.description}
@@ -149,10 +164,17 @@ const loadAllAssetsFromServer = async () => {
   );
 };
 
-//loads all assets for the user to buy
+//Place holder for advertising other people's products
 const StoreWindow = (props) => {
-  console.log("I work!!");
-  return <p>I work!!</p>;
+  console.log("Loaded store window");
+  return (
+    <img
+      id="adPic"
+      src="/assets/img/advertisement.png"
+      alt="asset advertisement"
+      href="https://vanphan.itch.io/peace-of-mind"
+    ></img>
+  );
 };
 
 const init = async () => {
@@ -169,7 +191,7 @@ const init = async () => {
     //generates all the assets
     ReactDOM.render(
       <StoreWindow csrf={data.csrfToken} />,
-      document.getElementById("assets")
+      document.getElementById("ads")
     );
 
     //Our asset lists

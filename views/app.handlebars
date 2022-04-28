@@ -26,18 +26,23 @@
       <div class="navlink"><a href="/store" id="storeBtn">Store</a></div>
     </nav>
 
-    <section id="makeAsset">
-
-    </section>
-    <section id="assets">
-
-    </section>
-
+    {{! Error message  }}
     <div id="assetMessage" class="hidden">
-      <img id="speech" src="/assets/img/speech.png" alt="speech box" />
       <h3><span id="errorMessage"></span></h3>
-      <img id="asset" src="assets/img/asset.png" alt="asset" />
     </div>
+
+    {{! Ads if there are any to be loaded }}
+    <section id="ads">
+    </section>
+
+    {{! Location where bar to generate assets appears }}
+    <section id="makeAsset">
+    </section>
+
+    {{! Location assets are loaded to screen  }}
+    <section id="assets">
+    </section>
+
     <script src="/assets/appBundle.js"></script>
   </body>
 </html>
